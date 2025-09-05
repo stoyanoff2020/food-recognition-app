@@ -5,11 +5,9 @@
 *.swp
 .DS_Store
 .atom/
-.build/
 .buildlog/
 .history
 .svn/
-.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -27,11 +25,12 @@ migrate_working_dir/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
 /build/
-/coverage/
 
 # Symbolication related
 app.*.symbols
@@ -43,25 +42,87 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-# Environment files with sensitive data
+
+# iOS related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Coverage
+coverage/
+
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Environment variables
 .env
 .env.local
-*.env.local
+.env.production
+.env.staging
+
+# Firebase configuration (keep template, ignore actual config)
+# Uncomment these if you want to keep Firebase config files private
+# android/app/google-services.json
+# ios/Runner/GoogleService-Info.plist
 
 # API Keys and secrets
-secrets/
-config/secrets.dart
+lib/config/api_keys.dart
+
+# Build artifacts
+*.apk
+*.aab
+*.ipa
+
+# Test coverage
+coverage/
+test/coverage/
 
 # Generated files
 *.g.dart
 *.freezed.dart
+*.mocks.dart
 
 # Platform specific
-ios/Pods/
-ios/Podfile.lock
-android/.gradle/
-android/local.properties
+.vscode/
+.idea/
+*.iml
 
-# IDE
-.vscode/settings.json
-.vscode/launch.json
+# Temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
+logs/
+
+# Cache directories
+.cache/
+node_modules/

@@ -26,26 +26,110 @@ jobs:
       with:
         channel: 'stable'
         
+    - name: Flutter Doctor
+      run: flutter doctor -v
+        
     - name: Get dependencies
-      run: flutter pub get
-      
-    - name: Run basic tests
       run: |
-        # Skip tests for now to focus on APK building
-        echo "Skipping tests to avoid CI segfault issues"
-        # flutter test --no-coverage || true
+        flutter clean
+        flutter pub get
       
+    - name: Create Firebase config files
+      run: |
+        # Create google-services.json for Android (placeholder for CI)
+        mkdir -p android/app
+        cat > android/app/google-services.json << 'EOF'
+{
+  "project_info": {
+    "project_number": "123456789",
+    "project_id": "food-recognition-app-ci",
+    "storage_bucket": "food-recognition-app-ci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789:android:abcdef123456",
+        "android_client_info": {
+          "package_name": "com.foodrecognition.food_recognition_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "fake-api-key-for-ci-build"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+EOF
+
+        # Create GoogleService-Info.plist for iOS (placeholder for CI)
+        mkdir -p ios/Runner
+        cat > ios/Runner/GoogleService-Info.plist << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>123456789-fake.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.123456789-fake</string>
+	<key>API_KEY</key>
+	<string>fake-api-key-for-ci-build</string>
+	<key>GCM_SENDER_ID</key>
+	<string>123456789</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.foodrecognition.food-recognition-app</string>
+	<key>PROJECT_ID</key>
+	<string>food-recognition-app-ci</string>
+	<key>STORAGE_BUCKET</key>
+	<string>food-recognition-app-ci.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:123456789:ios:abcdef123456</string>
+</dict>
+</plist>
+EOF
+        
     - name: Build APK (Debug)
       run: |
         echo "Building debug APK..."
-        flutter build apk --debug --split-per-abi
-        ls -la build/app/outputs/flutter-apk/
+        flutter build apk --debug --no-shrink --verbose
+        if [ -d "build/app/outputs/flutter-apk" ]; then
+          ls -la build/app/outputs/flutter-apk/
+        else
+          echo "Debug APK build failed - no output directory"
+          exit 1
+        fi
       
-    - name: Build APK (Release)
+    - name: Build APK (Release) 
       run: |
         echo "Building release APK..."
-        flutter build apk --release --split-per-abi
-        ls -la build/app/outputs/flutter-apk/
+        flutter build apk --release --no-shrink --verbose
+        if [ -d "build/app/outputs/flutter-apk" ]; then
+          ls -la build/app/outputs/flutter-apk/
+        else
+          echo "Release APK build failed - no output directory"
+          exit 1
+        fi
       
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
